@@ -12,7 +12,7 @@ const deleteMessage = async (id) => {
 };
 
 const getAllMessages = async () => {
-  const snapshot = await firestore.collection("messages").get();
+  const snapshot = await firestore.collection("messages").orderBy("createdAt", "asc").get();
   const messages = [];
   snapshot.forEach((doc) => {
     messages.push({ ...doc.data(), id: doc.id });
