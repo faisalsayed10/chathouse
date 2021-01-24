@@ -10,3 +10,9 @@ export const GET_MESSAGES = gql`
     }
   }
 `
+
+export const SEND_MESSAGE = gql`
+  mutation($author: String!, $message: String!) {
+    postMessage(author: $author, message: $message)
+  }
+`
