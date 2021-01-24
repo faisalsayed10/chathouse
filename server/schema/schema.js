@@ -1,5 +1,10 @@
 const { gql, ApolloServer } = require("apollo-server");
-const { postMessage, getAllMessages, deleteMessage } = require("../util/messages");
+const {
+  postMessage,
+  getAllMessages,
+  deleteMessage,
+} = require("../util/messages");
+const { signInWithGithub } = require("../util/users");
 
 const typeDefs = gql`
   type Message {
@@ -33,8 +38,8 @@ const resolvers = {
       return postMessage(data);
     },
     deleteMessage: (_, { id }) => {
-      return deleteMessage(id)
-    }
+      return deleteMessage(id);
+    },
   },
 };
 

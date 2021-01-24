@@ -1,4 +1,5 @@
 const firebase = require("firebase");
+require("dotenv").config();
 
 if (!firebase.apps.length) {
   firebase.initializeApp({
@@ -11,6 +12,6 @@ if (!firebase.apps.length) {
   });
 }
 
-firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth
 
-module.exports = { firebase }
+module.exports = { auth };
