@@ -1,11 +1,30 @@
 const bcrypt = require("bcryptjs");
 const { firestore } = require("./firebase-admin");
 const { createTokens } = require("./auth");
+const { validateEmail } = require("./emailValidator")
 
+// CHECK IF THE USER EXISTS OR NOT BEFORE SENDING IT TO THE DATABASE
 const createUser = async (data) => {
   const user = await firestore.collection("users").doc();
-  user.set({...data, count: 0});
-  return true;
+  let errors;
+
+  if (data.password.length < 8) {
+    errors = { message: "password is too short" };
+    return errors;
+  }
+
+  if (validateEmail(data.email) === false) {
+    errors = { message: "email is invalid" };
+    return errors;
+  }
+  
+  const hashedPassword = await bcrypt.hash(data.password, 10);
+  const userDetails = { ...data, password: hashedPassword, id: user.id };
+
+  const { accessToken, refreshToken } = createTokens(userDetails);
+
+  user.set({ ...data, password: hashedPassword });
+  return { userDetails, accessToken, refreshToken };
 };
 
 const loginUser = async (email, password) => {
@@ -15,16 +34,21 @@ const loginUser = async (email, password) => {
     .get();
 
   let user;
+  let errors;
   snapshot.forEach((doc) => {
     user = { ...doc.data(), id: doc.id };
   });
 
   if (user === undefined) {
-    return null;
+    errors = { message: "No such user exists" }
+    return errors;
   }
 
   const passwordIsValid = await bcrypt.compare(password, user.password);
-  if (!passwordIsValid) return null;
+  if (!passwordIsValid) {
+    errors = { message: "Password is incorrect" }
+    return errors;
+  };
 
   const { accessToken, refreshToken } = createTokens(user);
 

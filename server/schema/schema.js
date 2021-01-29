@@ -4,8 +4,7 @@ const {
   getAllMessages,
   deleteMessage,
 } = require("../util/messages");
-const bcrypt = require("bcryptjs");
-const { createUser, getUser } = require("../util/users");
+const { createUser, getUser, loginUser } = require("../util/users");
 require("dotenv").config();
 
 const typeDefs = gql`
@@ -20,7 +19,6 @@ const typeDefs = gql`
     id: ID!
     userName: String!
     email: String!
-    count: Int
   }
 
   type Query {
@@ -31,7 +29,7 @@ const typeDefs = gql`
   type Mutation {
     postMessage(message: String!, author: String!): ID
     deleteMessage(id: ID!): String
-    register(userName: String!, email: String!, password: String!): Boolean!
+    register(userName: String!, email: String!, password: String!): User
     login(email: String!, password: String!): User
     logout: Boolean!
   }
@@ -50,33 +48,47 @@ const resolvers = {
   },
   Mutation: {
     postMessage: (_, { message, author }) => {
-      const data = {
+      return postMessage({
         message,
         author,
         createdAt: new Date().toISOString(),
-      };
-      return postMessage(data);
+      });
     },
     deleteMessage: (_, { id }) => {
       return deleteMessage(id);
     },
-    register: async (_, { userName, email, password }) => {
-      const hashedPassword = await bcrypt.hash(password, 10);
-      return createUser({ userName, email, password: hashedPassword });
+    register: async (_, { userName, email, password }, { req, res }) => {
+      const response = await createUser({ userName, email, password });
+      if (response.message) {
+        throw new Error(response.message);
+      }
+
+      res.cookie("refresh-token", response.refreshToken, {
+        expire: 60 * 60 * 24 * 7,
+      });
+      res.cookie("access-token", response.accessToken, { expire: 60 * 15 });
+
+      return response.userDetails;
     },
     login: async (_, { email, password }, { res }) => {
-      const { accessToken, refreshToken, user } = loginUser(email, password)
+      const response = await loginUser(email, password);
 
-      res.cookie("refresh-token", refreshToken, { expire: 60 * 60 * 24 * 7 });
-      res.cookie("access-token", accessToken, { expire: 60 * 15 });
+      if (response.message) {
+        throw new Error(response.message);
+      }
 
-      return user;
+      res.cookie("refresh-token", response.refreshToken, {
+        expire: 60 * 60 * 24 * 7,
+      });
+      res.cookie("access-token", response.accessToken, { expire: 60 * 15 });
+
+      return response.user;
     },
     logout: async (_, __, { req, res }) => {
       res.clearCookie("refresh-token");
       res.clearCookie("access-token");
       return true;
-    }
+    },
   },
 };
 
