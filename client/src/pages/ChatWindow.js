@@ -1,8 +1,8 @@
 import { Box, Container, Flex, IconButton, Input } from "@chakra-ui/react";
 import { ArrowForwardIcon } from "@chakra-ui/icons";
 import React, { useState } from "react";
-import Chat from "./Chat";
-import { useAddMutation, Loading } from "mutation-cache-update";
+import Chat from "../components/Chat";
+import { useAddMutation } from "mutation-cache-update";
 import { GET_MESSAGES, SEND_MESSAGE } from "../query/queries";
 
 function ChatWindow() {
