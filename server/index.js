@@ -3,12 +3,12 @@ const cookieParser = require("cookie-parser");
 const { verify } = require("jsonwebtoken");
 const { createTokens } = require("./util/auth.js");
 const { getUser } = require("./util/users.js");
-const server = require("./schema/schema.js");
 const app = require("express")();
+app.use(cookieParser());
+const server = require("./schema/schema.js");
+
 
 const startServer = async () => {
-  app.use(cookieParser());
-
   app.use(async (req, res, next) => {
     const accessToken = req.cookies["access-token"];
     const refreshToken = req.cookies["refresh-token"];

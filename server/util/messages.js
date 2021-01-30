@@ -21,4 +21,14 @@ const getAllMessages = async () => {
   return messages;
 };
 
-module.exports = { postMessage, getAllMessages, deleteMessage };
+const getMessage = async (id) => {
+  const doc = await firestore.collection("messages").doc(id).get();
+  const message = {
+    ...doc.data(),
+    id: doc.id,
+  };
+
+  return message;
+};
+
+module.exports = { postMessage, getAllMessages, deleteMessage, getMessage };

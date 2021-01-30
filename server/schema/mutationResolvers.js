@@ -1,12 +1,14 @@
-const {
-  postMessage,
-  deleteMessage,
-} = require("../util/messages");
+const { postMessage, deleteMessage } = require("../util/messages");
 const { createUser, loginUser } = require("../util/users");
 require("dotenv").config();
 
 const Mutation = {
-  postMessage: (_, { message, author }) => {
+  postMessage: (_, { message, author }, { req, res }) => {
+    const accessToken = req.cookies["access-token"];
+    const refreshToken = req.cookies["refresh-token"];
+    if (!refreshToken && !accessToken) {
+      throw new Error("You are not logged in");
+    }
 
     return postMessage({
       message,
@@ -14,7 +16,7 @@ const Mutation = {
       createdAt: new Date().toISOString(),
     });
   },
-  deleteMessage: (_, { id }) => {
+  deleteMessage: async (_, { id }) => {
     return deleteMessage(id);
   },
   register: async (_, { userName, email, password }, { req, res }) => {
@@ -51,4 +53,4 @@ const Mutation = {
   },
 };
 
-module.exports = { Mutation }
+module.exports = { Mutation };
