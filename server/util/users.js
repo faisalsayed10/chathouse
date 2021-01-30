@@ -7,7 +7,6 @@ const {
   searchIfUserNameExists,
 } = require("./userExistence");
 
-// CHECK IF THE USER EXISTS OR NOT BEFORE SENDING IT TO THE DATABASE
 const createUser = async (data) => {
   const userRef = await firestore.collection("users");
   const user = await userRef.doc();

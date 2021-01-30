@@ -3,11 +3,10 @@ const cookieParser = require("cookie-parser");
 const { verify } = require("jsonwebtoken");
 const { createTokens } = require("./util/auth.js");
 const { getUser } = require("./util/users.js");
+const server = require("./schema/schema.js");
+const app = require("express")();
 
 const startServer = async () => {
-  const server = require("./schema/schema.js");
-  const app = require("express")();
-
   app.use(cookieParser());
 
   app.use(async (req, res, next) => {
@@ -48,16 +47,16 @@ const startServer = async () => {
       expire: 60 * 60 * 24 * 7,
     });
     res.cookie("access-token", tokens.accessToken, { expire: 60 * 15 });
-    req.id = user.id
+    req.id = user.id;
 
     next();
   });
 
   server.applyMiddleware({ app });
 
-  app.listen({ port: 4000 }, () => {
+  app.listen({ port: process.env.PORT || 4000 }, () => {
     console.log(
-      `🚀  Server ready at http://localhost:4000${server.graphqlPath}`
+      `🚀 Server ready at http://localhost:4000${server.graphqlPath}`
     );
   });
 };

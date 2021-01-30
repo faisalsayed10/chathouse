@@ -1,4 +1,4 @@
-import { ChakraProvider, CSSReset } from "@chakra-ui/react";
+import { ChakraProvider } from "@chakra-ui/react";
 import ChatWindow from './components/ChatWindow';
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 

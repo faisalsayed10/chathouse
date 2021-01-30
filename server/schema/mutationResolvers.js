@@ -3,9 +3,11 @@ const {
   deleteMessage,
 } = require("../util/messages");
 const { createUser, loginUser } = require("../util/users");
+require("dotenv").config();
 
 const Mutation = {
   postMessage: (_, { message, author }) => {
+
     return postMessage({
       message,
       author,
