@@ -12,7 +12,7 @@ function Chat({ user }) {
 
   return (
     <>
-      {data ? data.messages.map(({ message, author, id, createdAt }) => (
+      {data ? data?.messages.map(({ message, author, id, createdAt }) => (
         <div
           key={id}
           style={{

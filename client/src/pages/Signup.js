@@ -1,8 +1,9 @@
 import { Box, Button, Center, Input, Text } from '@chakra-ui/react';
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 function Signup() {
+  
   return (
     <Box
       display="flex"
@@ -10,9 +11,9 @@ function Signup() {
       alignItems="center"
       justifyContent="center"
     >
-      <Box w="md" padding="4" borderWidth="1px" borderRadius="lg">
-        <Text fontSize="3xl" align="center">
-          👋 Create an account
+      <Box w="sm" px="4" py="8" borderWidth="2px" borderRadius="lg">
+        <Text fontSize="2xl" align="center">
+          👋 Sign up
         </Text>
         <Box as="form" mt="16">
           <Input
@@ -22,7 +23,6 @@ function Signup() {
             m="0 auto"
             required
             type="text"
-            w="sm"
           />
           <Input
             placeholder="Email"
@@ -32,7 +32,6 @@ function Signup() {
             my="2"
             required
             type="text"
-            w="sm"
           />
           <Input
             placeholder="Password"
@@ -41,7 +40,6 @@ function Signup() {
             m="0 auto"
             required
             type="password"
-            w="sm"
           />
           <Button
             m="0 auto"

@@ -1,8 +1,17 @@
+import { useQuery } from "@apollo/client";
 import { Box, Button, Center, Input, Text } from "@chakra-ui/react";
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useContext, useState } from "react";
+import { Link, Redirect } from "react-router-dom";
+import { UserContext } from "../context/context";
+import { GET_USER } from "../query/queries";
 
 function Login() {
+  const { handleLogin, email, password, setEmail, setPassword } = useContext(UserContext);
+  // const { data, loading } = useQuery(GET_USER);
+
+  // if (loading) return "loading...";
+  // if (data?.me?.id) return <Redirect to="/" />;
+
   return (
     <Box
       display="flex"
@@ -10,11 +19,11 @@ function Login() {
       alignItems="center"
       justifyContent="center"
     >
-      <Box w="md" padding="4" borderWidth="1px" borderRadius="lg">
-        <Text fontSize="3xl" align="center">
-          👋 Login
+      <Box w="sm" px="4" py="8" borderWidth="2px" borderRadius="lg">
+        <Text fontSize="2xl" align="center">
+          👋 Log in
         </Text>
-        <Box as="form" mt="16">
+        <Box as="form" mt="16" onSubmit={handleLogin}>
           <Input
             placeholder="Enter your email"
             display="block"
@@ -23,7 +32,8 @@ function Login() {
             my="2"
             required
             type="text"
-            w="sm"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
           <Input
             placeholder="Password"
@@ -32,7 +42,8 @@ function Login() {
             m="0 auto"
             required
             type="password"
-            w="sm"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
           <Button
             m="0 auto"
