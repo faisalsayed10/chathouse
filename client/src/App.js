@@ -3,6 +3,8 @@ import ChatWindow from "./pages/ChatWindow";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import PrivateRoute from "./pages/PrivateRoute";
 
 function App() {
   return (
@@ -10,12 +12,11 @@ function App() {
       <ChakraProvider>
         <Router>
           <Switch>
-            <Route path="/login">
-              <Login />
-            </Route>
-            <Route path="/" exact>
+            <PrivateRoute path="/" exact>
               <ChatWindow />
-            </Route>
+            </PrivateRoute>
+            <Route path="/login" component={Login} />
+            <Route path="/signup" component={Signup} />
           </Switch>
         </Router>
       </ChakraProvider>

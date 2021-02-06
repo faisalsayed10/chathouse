@@ -1,8 +1,8 @@
-import { Box, Button, Center, Input, Text } from "@chakra-ui/react";
-import React from "react";
-import { Link } from "react-router-dom";
+import { Box, Button, Center, Input, Text } from '@chakra-ui/react';
+import React from 'react';
+import { Link } from 'react-router-dom';
 
-function Login() {
+function Signup() {
   return (
     <Box
       display="flex"
@@ -12,11 +12,20 @@ function Login() {
     >
       <Box w="md" padding="4" borderWidth="1px" borderRadius="lg">
         <Text fontSize="3xl" align="center">
-          👋 Login
+          👋 Create an account
         </Text>
         <Box as="form" mt="16">
           <Input
-            placeholder="Enter your email"
+            placeholder="Username"
+            display="block"
+            variant="flushed"
+            m="0 auto"
+            required
+            type="text"
+            w="sm"
+          />
+          <Input
+            placeholder="Email"
             display="block"
             variant="flushed"
             m="0 auto"
@@ -42,14 +51,14 @@ function Login() {
             colorScheme="cyan"
             variant="ghost"
           >
-            Login
+            Signup
           </Button>
         </Box>
         <Center>
           <Text as="h6">
-            Don't have an account?{" "}
-            <Link to="/signup" style={{ textDecoration: "underline" }}>
-              Sign up
+            Already have an account?{" "}
+            <Link to="/login" style={{ textDecoration: "underline" }}>
+              Log in
             </Link>
           </Text>
         </Center>
@@ -58,4 +67,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Signup

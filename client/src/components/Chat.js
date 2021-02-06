@@ -1,5 +1,5 @@
 import { useQuery } from "@apollo/client";
-import { Box } from "@chakra-ui/react";
+import { Box, Text } from "@chakra-ui/react";
 import React from "react";
 import { GET_MESSAGES } from "../query/queries";
 
@@ -7,15 +7,15 @@ function Chat({ user }) {
   const { loading, error, data } = useQuery(GET_MESSAGES);
 
   if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
+
+  console.log(data)
 
   return (
-    <Box m="2" height="100%">
-      {data.messages.map(({ message, author, id, createdAt }) => (
+    <>
+      {data ? data.messages.map(({ message, author, id, createdAt }) => (
         <div
           key={id}
           style={{
-            display: "flex",
             justifyContent: author === user ? "flex-end" : "flex-start",
             paddingBottom: "1em",
           }}
@@ -48,8 +48,8 @@ function Chat({ user }) {
             {message}
           </div>
         </div>
-      ))}
-    </Box>
+      )) : (<Text fontSize="2xl" align="center">No messages to display.</Text>)}
+    </>
   );
 }
 
