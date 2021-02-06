@@ -1,7 +1,7 @@
 import { useMutation } from "@apollo/client";
 import React, { useState, createContext } from "react";
 import { LOGIN } from "../query/queries";
-import { useHistory } from 'react-router-dom';
+import { useHistory } from "react-router-dom";
 const UserContext = createContext();
 
 const UserProvider = ({ children }) => {
@@ -22,7 +22,7 @@ const UserProvider = ({ children }) => {
       e.preventDefault();
       const { data } = await login({ variables: { email, password } });
       setUser(data.login);
-      console.log("redirecting...")
+      console.log("redirecting...");
       history.push("/");
     } catch (err) {
       console.error(err);
@@ -43,7 +43,7 @@ const UserProvider = ({ children }) => {
         setUserName,
         setErrors,
         handleLogin,
-        setUser
+        setUser,
       }}
     >
       {children}

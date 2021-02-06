@@ -13,41 +13,37 @@ function Chat({ user }) {
   return (
     <>
       {data ? data?.messages.map(({ message, author, id, createdAt }) => (
-        <div
+        <Box
           key={id}
-          style={{
-            justifyContent: author === user ? "flex-end" : "flex-start",
-            paddingBottom: "1em",
-          }}
+            display="flex"
+            justifyContent={author === user ? "flex-end" : "flex-start"}
+            py="2"
         >
           {author !== user && (
-            <div
-              style={{
-                height: 50,
-                width: 50,
-                marginRight: "0.5em",
-                border: "2px solid #e5e6ea",
-                borderRadius: 25,
-                textAlign: "center",
-                fontSize: "18pt",
-                paddingTop: 5,
-              }}
+            <Box
+                height="50px"
+                width="50px"
+                marginRight="0.5em"
+                border="2px solid #e5e6ea"
+                borderRadius="full"
+                align="center"
+                fontSize="18pt"
+                pt="5px"
             >
               {author.slice(0, 2).toUpperCase()}
-            </div>
+            </Box>
           )}
-          <div
-            style={{
-              backgroundColor: user === author ? "#58bf56" : "#e5e6ea",
-              color: user === author ? "white" : "black",
-              padding: "1em",
-              borderRadius: "1em",
-              maxWidth: "60%",
-            }}
+          <Box
+              backgroundColor={user === author ? "#58bf56" : "#e5e6ea"}
+              color={user === author ? "white" : "black"}
+              px="4"
+              pt="0.5em"
+              borderRadius="sm"
+              maxW="60%"
           >
             {message}
-          </div>
-        </div>
+          </Box>
+        </Box>
       )) : (<Text fontSize="2xl" align="center">No messages to display.</Text>)}
     </>
   );

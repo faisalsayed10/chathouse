@@ -36,13 +36,13 @@ const Mutation = {
     const response = await loginUser(email, password);
 
     if (response.message) {
-      throw new Error(response.message);
+      throw new Error(response.message)
     }
 
     res.cookie("refresh-token", response.refreshToken, {
-      expire: 60 * 60 * 24 * 7,
+      expires: new Date(Number(new Date()) + 604800000),
     });
-    res.cookie("access-token", response.accessToken, { expire: 60 * 15 });
+    res.cookie("access-token", response.accessToken, { expires: new Date(Number(new Date()) + 900000)})
 
     return response.user;
   },

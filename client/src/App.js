@@ -11,7 +11,7 @@ function App() {
   return (
     <ApolloProvider client={client}>
       <ChakraProvider>
-        <Router>
+        <Router forceRefresh>
           <UserProvider>
             <Switch>
               <PrivateRoute path="/" exact>

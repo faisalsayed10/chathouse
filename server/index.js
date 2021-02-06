@@ -7,7 +7,6 @@ const app = require("express")();
 app.use(cookieParser());
 const server = require("./schema/schema.js");
 
-
 const startServer = async () => {
   app.use(async (req, res, next) => {
     const accessToken = req.cookies["access-token"];
@@ -52,7 +51,13 @@ const startServer = async () => {
     next();
   });
 
-  server.applyMiddleware({ app });
+  server.applyMiddleware({
+    app,
+    cors: {
+      credentials: true,
+      origin: "http://localhost:3000",
+    },
+  });
 
   app.listen({ port: process.env.PORT || 4000 }, () => {
     console.log(

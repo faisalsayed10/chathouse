@@ -40,10 +40,10 @@ function ChatWindow() {
       bgColor="#f8f8ff"
       width={["300px", "500px", "1200px"]}
       my="6"
-      height="90vh"
+      height="80vh"
       borderRadius="10px"
     >
-      <Container m="2" height="100%">
+      <Container my="2" p="0" height="100%" overflow="scroll">
         {error ? (
           <Text color="red.500" fontSize="2xl" align="center">
             {error}
