@@ -12,7 +12,7 @@ const UserProvider = ({ children }) => {
   const [password, setPassword] = useState("");
   const history = useHistory();
   // eslint-disable-next-line
-  const [login, { _ }] = useMutation(LOGIN, { onCompleted: undefined });
+  const [login, { _ }] = useMutation(LOGIN);
   // eslint-disable-next-line
   const [register, { __ }] = useMutation(REGISTER);
   const toast = useToast();
