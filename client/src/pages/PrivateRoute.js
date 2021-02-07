@@ -11,11 +11,6 @@ function PrivateRoute({ children, ...rest }) {
 
   console.log("logged")
 
-  useEffect(() => {
-    setUser(data?.me)
-    //eslint-disable-next-line
-  }, [data])
-
   if (loading && !data) return <Loading />;
   if (!data?.me?.id) {
     return <Redirect to="/login" />;
