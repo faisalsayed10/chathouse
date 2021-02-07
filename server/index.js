@@ -45,10 +45,12 @@ const startServer = async () => {
     res.cookie("refresh-token", tokens.refreshToken, {
       expires: new Date(Number(new Date()) + 604800000),
       sameSite: "None",
+      secure
     });
     res.cookie("access-token", tokens.accessToken, {
       expires: new Date(Number(new Date()) + 900000),
       sameSite: "None",
+      secure
     });
     req.id = user.id;
 
