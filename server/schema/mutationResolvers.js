@@ -28,12 +28,12 @@ const Mutation = {
     res.cookie("refresh-token", response.refreshToken, {
       expires: new Date(Number(new Date()) + 604800000),
       sameSite: "None",
-      secure
+      secure: true,
     });
     res.cookie("access-token", response.accessToken, {
       expires: new Date(Number(new Date()) + 900000),
       sameSite: "None",
-      secure,
+      secure: true,
     });
 
     return response.userDetails;
@@ -48,12 +48,12 @@ const Mutation = {
     res.cookie("refresh-token", response.refreshToken, {
       expires: new Date(Number(new Date()) + 604800000),
       sameSite: "None",
-      secure,
+      secure: true,
     });
     res.cookie("access-token", response.accessToken, {
       expires: new Date(Number(new Date()) + 900000),
       sameSite: "None",
-      secure,
+      secure: true,
     });
 
     return response.user;
