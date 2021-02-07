@@ -27,9 +27,11 @@ const Mutation = {
 
     res.cookie("refresh-token", response.refreshToken, {
       expires: new Date(Number(new Date()) + 604800000),
+      sameSite: "None",
     });
     res.cookie("access-token", response.accessToken, {
       expires: new Date(Number(new Date()) + 900000),
+      sameSite: "None",
     });
 
     return response.userDetails;
@@ -43,9 +45,11 @@ const Mutation = {
 
     res.cookie("refresh-token", response.refreshToken, {
       expires: new Date(Number(new Date()) + 604800000),
+      sameSite: "None"
     });
     res.cookie("access-token", response.accessToken, {
       expires: new Date(Number(new Date()) + 900000),
+      sameSite: "None",
     });
 
     return response.user;
