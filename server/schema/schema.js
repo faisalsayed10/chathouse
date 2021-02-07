@@ -36,5 +36,6 @@ module.exports = new ApolloServer({
   typeDefs,
   resolvers,
   context: ({ req, res }) => ({ req, res }),
-  playground: true
+  playground: true,
+  introspection: true,
 });
