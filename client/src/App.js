@@ -11,7 +11,7 @@ function App() {
   return (
     <ApolloProvider client={client}>
       <ChakraProvider>
-        <Router forceRefresh>
+        <Router>
           <UserProvider>
             <Switch>
               <PrivateRoute path="/" exact>
@@ -28,9 +28,10 @@ function App() {
 }
 
 const client = new ApolloClient({
+  // uri: process.env.REACT_APP_GRAPHQL_URI,
   uri: "http://localhost:4000/graphql",
   cache: new InMemoryCache(),
-  credentials: 'include'
+  credentials: "include",
 });
 
 export default App;

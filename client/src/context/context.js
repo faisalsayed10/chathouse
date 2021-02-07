@@ -12,7 +12,7 @@ const UserProvider = ({ children }) => {
   const [password, setPassword] = useState("");
   const history = useHistory();
   // eslint-disable-next-line
-  const [login, { _ }] = useMutation(LOGIN);
+  const [login, { _ }] = useMutation(LOGIN, { onCompleted: undefined });
   // eslint-disable-next-line
   const [register, { __ }] = useMutation(REGISTER);
   const toast = useToast();
@@ -21,6 +21,7 @@ const UserProvider = ({ children }) => {
     try {
       e.preventDefault();
       const { data } = await login({ variables: { email, password } });
+      console.log(data)
       setUser(data.login);
       toast({
         title: `Login Success!`,
