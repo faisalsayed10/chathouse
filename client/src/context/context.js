@@ -1,32 +1,78 @@
 import { useMutation } from "@apollo/client";
 import React, { useState, createContext } from "react";
-import { LOGIN } from "../query/queries";
+import { LOGIN, REGISTER } from "../schema/mutations";
 import { useHistory } from "react-router-dom";
+import { useToast } from "@chakra-ui/react";
 const UserContext = createContext();
 
 const UserProvider = ({ children }) => {
-  // signup function which will call the mutation
-  // and then search the user from the jwt decoded token?
-
   const [user, setUser] = useState();
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState("");
   const history = useHistory();
   // eslint-disable-next-line
   const [login, { _ }] = useMutation(LOGIN);
+  // eslint-disable-next-line
+  const [register, { __ }] = useMutation(REGISTER);
+  const toast = useToast();
 
   const handleLogin = async (e) => {
     try {
       e.preventDefault();
       const { data } = await login({ variables: { email, password } });
       setUser(data.login);
+      toast({
+        title: `Login Success!`,
+        description: `You've logged in successfully.`,
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+      setEmail("");
+      setPassword("");
       console.log("redirecting...");
       history.push("/");
     } catch (err) {
       console.error(err);
-      setErrors({ message: err.message });
+      toast({
+        title: `An error occured.`,
+        description: `${err.message}`,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
+
+  const handleSignup = async (e) => {
+    try {
+      e.preventDefault();
+      const { data } = await register({
+        variables: { userName, email, password },
+      });
+      setUser(data.register);
+      toast({
+        title: "Account created.",
+        description: "We've created your account for you.",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+      setEmail("");
+      setUserName("");
+      setPassword("");
+      console.log("redirecting...");
+      history.push("/");
+    } catch (err) {
+      console.error(err);
+      toast({
+        title: `An error occured.`,
+        description: `${err.message}`,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
     }
   };
 
@@ -37,13 +83,13 @@ const UserProvider = ({ children }) => {
         userName,
         email,
         password,
-        errors,
+        toast,
         setEmail,
         setPassword,
         setUserName,
-        setErrors,
         handleLogin,
         setUser,
+        handleSignup,
       }}
     >
       {children}

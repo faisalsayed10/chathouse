@@ -2,15 +2,18 @@ import { useQuery } from "@apollo/client";
 import { Box, Button, Center, Input, Text } from "@chakra-ui/react";
 import React, { useContext } from "react";
 import { Link, Redirect } from "react-router-dom";
+import Loading from "../components/Loading";
 import { UserContext } from "../context/context";
-import { GET_USER } from "../query/queries";
+import { GET_USER } from "../schema/queries";
 
 function Login() {
-  const { handleLogin, email, password, setEmail, setPassword } = useContext(UserContext);
+  const { handleLogin, email, password, setEmail, setPassword } = useContext(
+    UserContext
+  );
   const { data, loading } = useQuery(GET_USER);
 
-  if (loading) return "loading...";
-  if (data.me?.id) return <Redirect to="/" />;
+  if (loading) return <Loading />;
+  if (data?.me?.id) return <Redirect to="/" />;
 
   return (
     <Box

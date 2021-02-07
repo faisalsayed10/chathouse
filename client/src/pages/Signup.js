@@ -1,9 +1,26 @@
-import { Box, Button, Center, Input, Text } from '@chakra-ui/react';
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useQuery } from "@apollo/client";
+import { Box, Button, Center, Input, Text } from "@chakra-ui/react";
+import React, { useContext } from "react";
+import { Link, Redirect } from "react-router-dom";
+import Loading from "../components/Loading";
+import { UserContext } from "../context/context";
+import { GET_USER } from "../schema/queries";
 
 function Signup() {
-  
+  const {
+    handleSignup,
+    email,
+    password,
+    userName,
+    setEmail,
+    setPassword,
+    setUserName,
+  } = useContext(UserContext);
+  const { data, loading } = useQuery(GET_USER);
+
+  if (loading) return <Loading />;
+  if (data.me?.id) return <Redirect to="/" />;
+
   return (
     <Box
       display="flex"
@@ -15,7 +32,7 @@ function Signup() {
         <Text fontSize="2xl" align="center">
           👋 Sign up
         </Text>
-        <Box as="form" mt="16">
+        <Box as="form" mt="16" onSubmit={handleSignup}>
           <Input
             placeholder="Username"
             display="block"
@@ -23,6 +40,8 @@ function Signup() {
             m="0 auto"
             required
             type="text"
+            value={userName}
+            onChange={(e) => setUserName(e.target.value)}
           />
           <Input
             placeholder="Email"
@@ -32,6 +51,8 @@ function Signup() {
             my="2"
             required
             type="text"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
           <Input
             placeholder="Password"
@@ -40,6 +61,8 @@ function Signup() {
             m="0 auto"
             required
             type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
           <Button
             m="0 auto"
@@ -65,4 +88,4 @@ function Signup() {
   );
 }
 
-export default Signup
+export default Signup;

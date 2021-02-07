@@ -12,8 +12,6 @@ const createUser = async (data) => {
   const user = await userRef.doc();
   let errors;
 
-  
-
   if (data.password.length < 8) {
     errors = { message: "password is too short" };
     return errors;
