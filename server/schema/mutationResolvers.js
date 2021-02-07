@@ -59,8 +59,14 @@ const Mutation = {
     return response.user;
   },
   logout: async (_, __, { req, res }) => {
-    res.clearCookie("refresh-token");
-    res.clearCookie("access-token");
+    res.clearCookie("refresh-token", {
+      sameSite: "None",
+      secure: true
+    });
+    res.clearCookie("access-token", {
+      sameSite: "None",
+      secure: true,
+    });
     return true;
   },
 };
