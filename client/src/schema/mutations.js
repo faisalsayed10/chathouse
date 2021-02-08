@@ -31,3 +31,9 @@ export const LOGOUT = gql`
     logout
   }
 `
+
+export const DELETE_MESSAGE = gql`
+  mutation($id: ID!) {
+    deleteMessage(id: $id)
+  }
+`

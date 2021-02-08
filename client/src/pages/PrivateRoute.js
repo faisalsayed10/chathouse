@@ -9,8 +9,6 @@ function PrivateRoute({ children, ...rest }) {
   const { data, loading } = useQuery(GET_USER, { fetchPolicy: 'cache-and-network'});
   const { setUser } = useContext(UserContext)
 
-  console.log("logged")
-
   useEffect(() => {
     setUser(data?.me)
     //eslint-disable-next-line

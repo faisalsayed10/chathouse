@@ -1,5 +1,5 @@
 .custom-scroll::-webkit-scrollbar {
-  width: 5px;
+  width: 10px;
 }
 
 .custom-scroll::-webkit-scrollbar-thumb {

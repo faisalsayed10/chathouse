@@ -4,10 +4,10 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "dev": "nodemon index.js"
   },
   "dependencies": {
-    "apollo-server": "^2.19.2",
     "apollo-server-express": "^2.19.2",
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.5",

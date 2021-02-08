@@ -1,17 +1,38 @@
-import { useQuery } from "@apollo/client";
-import { Box, Text } from "@chakra-ui/react";
+import { useMutation, useQuery } from "@apollo/client";
+import { DeleteIcon, ExternalLinkIcon, HamburgerIcon } from "@chakra-ui/icons";
+import {
+  Box,
+  IconButton,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  Text,
+} from "@chakra-ui/react";
 import React from "react";
+import { DELETE_MESSAGE } from "../schema/mutations";
 import { GET_MESSAGES } from "../schema/queries";
 import Loading from "./Loading";
 
 function Chat({ user }) {
   // eslint-disable-next-line
   const { loading, _, data } = useQuery(GET_MESSAGES);
+  const [deleteMessage] = useMutation(DELETE_MESSAGE)
 
   if (loading) return <Loading />;
 
+  const copyToClipboard = (text) => {
+    let tempInput = document.createElement("textarea")
+    tempInput.value = text;
+    document.body.appendChild(tempInput);
+    tempInput.select();
+    document.execCommand("copy");
+    document.body.removeChild(tempInput);
+  };
+
   return (
     <>
+    
       {data ? (
         data?.messages.map(({ message, author, id }) => (
           <Box
@@ -34,21 +55,45 @@ function Chat({ user }) {
                 {author.slice(0, 2).toUpperCase()}
               </Box>
             )}
-            <Box
+            <Text
               backgroundColor={user === author ? "#58bf56" : "#e5e6ea"}
               color={user === author ? "white" : "black"}
               px="4"
-              pt="0.7em"
+              py="0.7em"
               borderRadius="sm"
               maxW="60%"
-              minH="50px"
               fontSize="md"
             >
               <span style={{ fontWeight: "bold" }}>
                 {user === author ? "You" : author}:
               </span>{" "}
               {message}
-            </Box>
+            </Text>
+            {user === author ? (
+              <Menu>
+                <MenuButton
+                  as={IconButton}
+                  aria-label="Options"
+                  icon={<HamburgerIcon />}
+                  size="xs"
+                  variant="outline"
+                  ml="2"
+                  padding="0"
+                  transition="all 0.2s"
+                />
+                <MenuList>
+                  <MenuItem
+                    icon={<ExternalLinkIcon />}
+                    onClick={() => copyToClipboard(message)}
+                  >
+                    Copy
+                  </MenuItem>
+                  <MenuItem icon={<DeleteIcon />} type="submit" onClick={() => deleteMessage({variables: { id }})}>
+                    Delete
+                  </MenuItem>
+                </MenuList>
+              </Menu>
+            ) : null}
           </Box>
         ))
       ) : (

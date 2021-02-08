@@ -1,4 +1,12 @@
-import { Box, Button, Container, Flex, IconButton, Input, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Container,
+  Flex,
+  IconButton,
+  Input,
+  Text,
+} from "@chakra-ui/react";
 import { ArrowForwardIcon } from "@chakra-ui/icons";
 import React, { useContext, useState } from "react";
 import Chat from "../components/Chat";
@@ -6,6 +14,7 @@ import { LOGOUT, SEND_MESSAGE } from "../schema/mutations";
 import { UserContext } from "../context/context";
 import { useMutation } from "@apollo/client";
 import { useHistory } from "react-router-dom";
+import "../styles.css";
 
 function ChatWindow() {
   const { user } = useContext(UserContext);
@@ -15,7 +24,9 @@ function ChatWindow() {
   // eslint-disable-next-line
   const [sendMessage, { _ }] = useMutation(SEND_MESSAGE);
   // eslint-disable-next-line
-  const [logout, { __ }] = useMutation(LOGOUT); 
+  const [logout, { __ }] = useMutation(LOGOUT);
+
+  
 
   const handleSubmit = async (e) => {
     try {
