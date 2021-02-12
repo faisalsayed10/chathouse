@@ -8,25 +8,24 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { ArrowForwardIcon } from "@chakra-ui/icons";
-import React, { useContext, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import Chat from "../components/Chat";
 import { LOGOUT, SEND_MESSAGE } from "../schema/mutations";
 import { UserContext } from "../context/context";
 import { useMutation } from "@apollo/client";
 import { useHistory } from "react-router-dom";
 import "../styles.css";
+import { GET_MESSAGES } from "../schema/queries";
 
 function ChatWindow() {
   const { user } = useContext(UserContext);
   const history = useHistory();
   const [content, setContent] = useState("");
   const [error, setError] = useState("");
-  // eslint-disable-next-line
-  const [sendMessage, { _ }] = useMutation(SEND_MESSAGE);
-  // eslint-disable-next-line
-  const [logout, { __ }] = useMutation(LOGOUT);
+  const [sendMessage] = useMutation(SEND_MESSAGE);
 
-  
+  const [logout] = useMutation(LOGOUT);
+  const dummyRef = useRef();
 
   const handleSubmit = async (e) => {
     try {
@@ -35,6 +34,8 @@ function ChatWindow() {
         variables: { author: user.userName, message: content },
       });
       setContent("");
+      dummyRef.current.scrollIntoView({ behavior: "smooth" });
+      
     } catch (err) {
       setError("Server not reachable at the moment");
       setContent("");
@@ -79,16 +80,16 @@ function ChatWindow() {
             className="custom-scroll"
             height="100%"
             px="2"
-            overflow="scroll"
-            overflowX="hidden"
+            overflowY="auto"
           >
             {error ? (
               <Text color="red.500" fontSize="2xl" align="center">
                 {error}
               </Text>
             ) : (
-              <Chat user={user?.userName} error={error} />
+              <Chat user={user?.userName} dummy={dummyRef} />
             )}
+            <span ref={dummyRef}></span>
           </Container>
           <Box
             mt="4"

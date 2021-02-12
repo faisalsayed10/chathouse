@@ -1,5 +1,6 @@
 import { useMutation, useQuery } from "@apollo/client";
-import { DeleteIcon, ExternalLinkIcon, HamburgerIcon } from "@chakra-ui/icons";
+import { CopyIcon, DeleteIcon, HamburgerIcon } from "@chakra-ui/icons";
+import copy from "copy-text-to-clipboard";
 import {
   Box,
   IconButton,
@@ -9,30 +10,28 @@ import {
   MenuList,
   Text,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useEffect } from "react";
 import { DELETE_MESSAGE } from "../schema/mutations";
 import { GET_MESSAGES } from "../schema/queries";
 import Loading from "./Loading";
 
-function Chat({ user }) {
-  // eslint-disable-next-line
-  const { loading, _, data } = useQuery(GET_MESSAGES);
-  const [deleteMessage] = useMutation(DELETE_MESSAGE)
+function Chat({ user, dummy }) {
+  const { loading, data } = useQuery(GET_MESSAGES);
+  const [deleteMessage] = useMutation(DELETE_MESSAGE, {
+    
+  });
+
+  useEffect(() => {
+    if (loading) {
+      return;
+    }
+    dummy.current.scrollIntoView({ behavior: "smooth" });
+  }, [loading, data, dummy]);
 
   if (loading) return <Loading />;
 
-  const copyToClipboard = (text) => {
-    let tempInput = document.createElement("textarea")
-    tempInput.value = text;
-    document.body.appendChild(tempInput);
-    tempInput.select();
-    document.execCommand("copy");
-    document.body.removeChild(tempInput);
-  };
-
   return (
     <>
-    
       {data ? (
         data?.messages.map(({ message, author, id }) => (
           <Box
@@ -83,17 +82,21 @@ function Chat({ user }) {
                 />
                 <MenuList>
                   <MenuItem
-                    icon={<ExternalLinkIcon />}
-                    onClick={() => copyToClipboard(message)}
+                    icon={<CopyIcon />}
+                    onClick={() => copy(message)}
                   >
                     Copy
                   </MenuItem>
-                  <MenuItem icon={<DeleteIcon />} type="submit" onClick={() => deleteMessage({variables: { id }})}>
+                  <MenuItem
+                    icon={<DeleteIcon />}
+                    type="submit"
+                    onClick={() => deleteMessage({ variables: { id } })}
+                  >
                     Delete
                   </MenuItem>
                 </MenuList>
               </Menu>
-            ) : null}
+            ) : null }
           </Box>
         ))
       ) : (

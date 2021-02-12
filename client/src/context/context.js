@@ -6,15 +6,13 @@ import { useToast } from "@chakra-ui/react";
 const UserContext = createContext();
 
 const UserProvider = ({ children }) => {
-  const [user, setUser] = useState();
+  const [user, setUser] = useState(null);
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const history = useHistory();
-  // eslint-disable-next-line
-  const [login, { _ }] = useMutation(LOGIN);
-  // eslint-disable-next-line
-  const [register, { __ }] = useMutation(REGISTER);
+  const [login] = useMutation(LOGIN);
+  const [register] = useMutation(REGISTER);
   const toast = useToast();
 
   const handleLogin = async (e) => {

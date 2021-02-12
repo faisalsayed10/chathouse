@@ -23,7 +23,10 @@ const createUser = async (data) => {
   }
 
   const ifEmailExists = await searchIfEmailExists(userRef, data.email);
-  const ifUserNameExists = await searchIfUserNameExists(userRef, data.userName);
+  const ifUserNameExists = await searchIfUserNameExists(
+    userRef,
+    data.userName.toLowerCase()
+  );
 
   if (ifEmailExists && ifEmailExists.message) {
     errors = { message: ifEmailExists.message };
@@ -36,12 +39,12 @@ const createUser = async (data) => {
   }
 
   const hashedPassword = await bcrypt.hash(data.password, 10);
-  const userDetails = { ...data, password: hashedPassword, id: user.id };
+  const userDetails = { ...data, password: hashedPassword, userName: data.userName.toLowerCase(), id: user.id };
 
   const { accessToken, refreshToken } = createTokens(userDetails);
 
   user.set({ ...data, password: hashedPassword });
-  return { userDetails, accessToken, refreshToken };
+  return { userDetails, userName: data.userName.toLowerCase(), accessToken, refreshToken };
 };
 
 const loginUser = async (email, password) => {
