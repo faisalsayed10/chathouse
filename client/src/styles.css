@@ -9,3 +9,24 @@
   box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
 }
+
+p,
+ul,
+li,
+code {
+  display: inline;
+  padding: 0;
+}
+
+a {
+  color: rgb(0, 119, 255) !important;
+  text-decoration: underline !important;
+}
+
+code {
+  font-family: monospace;
+  overflow-wrap: break-word;
+  background: rgb(88, 88, 88);
+  border-radius: 3px;
+  padding: 1px 3px;
+}

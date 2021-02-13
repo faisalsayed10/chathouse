@@ -20,14 +20,11 @@ import {
   SUBSCRIBE_TO_DELETED_MESSAGES,
   SUBSCRIBE_TO_MESSAGES,
 } from "../schema/subscriptions";
-import Rte from "../components/RichTextEditor";
+import Draft from "../draft/Draft";
 
 function ChatWindow() {
   const { user } = useContext(UserContext);
   const history = useHistory();
-  const [content, setContent] = useState("");
-  const [error, setError] = useState("");
-  const [sendMessage] = useMutation(SEND_MESSAGE);
   const [logout, { client }] = useMutation(LOGOUT);
   const dummyRef = useRef();
   const { loading, data, subscribeToMore } = useQuery(GET_MESSAGES);
@@ -39,20 +36,6 @@ function ChatWindow() {
       history.push("/login");
     } catch (err) {
       console.error(err);
-    }
-  };
-
-  const handleSubmit = async (e) => {
-    try {
-      e.preventDefault();
-      await sendMessage({
-        variables: { author: user.userName, message: content },
-      });
-      setContent("");
-      dummyRef.current.scrollIntoView({ behavior: "smooth" });
-    } catch (err) {
-      setError("Server not reachable at the moment");
-      setContent("");
     }
   };
 
@@ -99,7 +82,7 @@ function ChatWindow() {
           borderWidth="2px"
           borderRadius="lg"
           bgColor="#f8f8ff"
-          width={["300px", "450px", "500px"]}
+          width={["300px", "450px", "600px"]}
           mt="14"
           mx="0"
           p="0"
@@ -112,44 +95,17 @@ function ChatWindow() {
             px="2"
             overflowY="auto"
           >
-            {error ? (
-              <Text color="red.500" fontSize="2xl" align="center">
-                {error}
-              </Text>
-            ) : (
-              <Chat
-                user={user?.userName}
-                dummy={dummyRef}
-                loading={loading}
-                data={data}
-                subscribeToNewMessages={subscribeToNewMessages}
-                subscribeToDeletedMessages={subscribeToDeletedMessages}
-              />
-            )}
+            <Chat
+              user={user?.userName}
+              dummy={dummyRef}
+              loading={loading}
+              data={data}
+              subscribeToNewMessages={subscribeToNewMessages}
+              subscribeToDeletedMessages={subscribeToDeletedMessages}
+            />
             <span ref={dummyRef}></span>
           </Container>
-          <Box
-            mt="4"
-            as="form"
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
-            onSubmit={handleSubmit}
-          >
-            <Input
-              mr="1"
-              required
-              placeholder="Type your message..."
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-            />
-            {/* <Rte value={content} setValue={setContent} /> */}
-            <IconButton
-              type="submit"
-              colorScheme="blue"
-              icon={<ArrowForwardIcon />}
-            />
-          </Box>
+          <Draft dummyRef={dummyRef} userName={user?.userName} />
         </Container>
       </Flex>
     </>

@@ -13,6 +13,8 @@ import {
 import React, { useEffect } from "react";
 import { DELETE_MESSAGE } from "../schema/mutations";
 import Loading from "./Loading";
+import parse from "html-react-parser";
+import "../styles.css";
 
 function Chat({
   user,
@@ -63,10 +65,10 @@ function Chat({
                 {author.slice(0, 2).toUpperCase()}
               </Box>
             )}
-            <Text
+            <Box
               backgroundColor={user === author ? "#58bf56" : "#e5e6ea"}
               color={user === author ? "white" : "black"}
-              px="4"
+              px="2"
               py="0.7em"
               borderRadius="sm"
               maxW="60%"
@@ -75,8 +77,8 @@ function Chat({
               <span style={{ fontWeight: "bold" }}>
                 {user === author ? "You" : author}:
               </span>{" "}
-              {message}
-            </Text>
+              {parse(message)}
+            </Box>
             {user === author ? (
               <Menu>
                 <MenuButton
@@ -90,7 +92,15 @@ function Chat({
                   transition="all 0.2s"
                 />
                 <MenuList>
-                  <MenuItem icon={<CopyIcon />} onClick={() => copy(message)}>
+                  <MenuItem
+                    icon={<CopyIcon />}
+                    onClick={() => {
+                      let stringified = message
+                        .toString()
+                        .replaceAll(/<[^>]*>/gi, "");
+                      copy(stringified);
+                    }}
+                  >
                     Copy
                   </MenuItem>
                   <MenuItem
