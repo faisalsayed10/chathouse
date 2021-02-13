@@ -7,8 +7,10 @@ const postMessage = async (data) => {
 };
 
 const deleteMessage = async (id) => {
-  const message = await firestore.collection("messages").doc(id).delete();
-  return "DELETED!";
+  const messageRef = await firestore.collection("messages").doc(id);
+  const messageInfo = await { ...await (await messageRef.get()).data(), id }
+  await messageRef.delete();
+  return messageInfo;
 };
 
 const getAllMessages = async () => {

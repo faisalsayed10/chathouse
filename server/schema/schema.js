@@ -1,5 +1,5 @@
-const { gql, ApolloServer } = require("apollo-server-express");
-const { Mutation } = require("./mutationResolvers");
+const { gql, ApolloServer, PubSub } = require("apollo-server-express");
+const { Mutation, Subscription } = require("./mutationResolvers");
 const { Query } = require("./queryResolvers");
 
 const typeDefs = gql`
@@ -21,6 +21,11 @@ const typeDefs = gql`
     me: User
   }
 
+  type Subscription {
+    newMessage: Message
+    deleteMessage: Message
+  }
+
   type Mutation {
     postMessage(message: String!, author: String!): ID
     deleteMessage(id: ID!): String
@@ -30,12 +35,13 @@ const typeDefs = gql`
   }
 `;
 
-const resolvers = { Query, Mutation };
+const pubsub = new PubSub()
+const resolvers = { Subscription, Query, Mutation };
 
 module.exports = new ApolloServer({
   typeDefs,
   resolvers,
-  context: ({ req, res }) => ({ req, res }),
+  context: ({ req, res }) => ({ req, res, pubsub }),
   playground: true,
   introspection: true,
 });

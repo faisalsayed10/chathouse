@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { CopyIcon, DeleteIcon, HamburgerIcon } from "@chakra-ui/icons";
 import copy from "copy-text-to-clipboard";
 import {
@@ -12,12 +12,23 @@ import {
 } from "@chakra-ui/react";
 import React, { useEffect } from "react";
 import { DELETE_MESSAGE } from "../schema/mutations";
-import { GET_MESSAGES } from "../schema/queries";
 import Loading from "./Loading";
 
-function Chat({ user, dummy }) {
-  const { loading, data } = useQuery(GET_MESSAGES);
+function Chat({
+  user,
+  dummy,
+  loading,
+  data,
+  subscribeToNewMessages,
+  subscribeToDeletedMessages,
+}) {
   const [deleteMessage] = useMutation(DELETE_MESSAGE);
+
+  useEffect(() => {
+    subscribeToNewMessages();
+    subscribeToDeletedMessages();
+    // eslint-disable-next-line
+  }, []);
 
   useEffect(() => {
     if (loading) {
@@ -79,10 +90,7 @@ function Chat({ user, dummy }) {
                   transition="all 0.2s"
                 />
                 <MenuList>
-                  <MenuItem
-                    icon={<CopyIcon />}
-                    onClick={() => copy(message)}
-                  >
+                  <MenuItem icon={<CopyIcon />} onClick={() => copy(message)}>
                     Copy
                   </MenuItem>
                   <MenuItem
@@ -94,7 +102,7 @@ function Chat({ user, dummy }) {
                   </MenuItem>
                 </MenuList>
               </Menu>
-            ) : null }
+            ) : null}
           </Box>
         ))
       ) : (

@@ -12,18 +12,24 @@ import React, { useContext, useRef, useState } from "react";
 import Chat from "../components/Chat";
 import { LOGOUT, SEND_MESSAGE } from "../schema/mutations";
 import { UserContext } from "../context/context";
-import { useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { useHistory } from "react-router-dom";
 import "../styles.css";
+import { GET_MESSAGES } from "../schema/queries";
+import {
+  SUBSCRIBE_TO_DELETED_MESSAGES,
+  SUBSCRIBE_TO_MESSAGES,
+} from "../schema/subscriptions";
 
 function ChatWindow() {
   const { user } = useContext(UserContext);
   const history = useHistory();
   const [content, setContent] = useState("");
   const [error, setError] = useState("");
-  const [sendMessage] = useMutation(SEND_MESSAGE)
+  const [sendMessage] = useMutation(SEND_MESSAGE);
   const [logout, { client }] = useMutation(LOGOUT);
   const dummyRef = useRef();
+  const { loading, data, subscribeToMore } = useQuery(GET_MESSAGES);
 
   const handleLogout = async (e) => {
     try {
@@ -34,7 +40,7 @@ function ChatWindow() {
       console.error(err);
     }
   };
-  
+
   const handleSubmit = async (e) => {
     try {
       e.preventDefault();
@@ -49,6 +55,30 @@ function ChatWindow() {
     }
   };
 
+  const subscribeToNewMessages = () =>
+    subscribeToMore({
+      document: SUBSCRIBE_TO_MESSAGES,
+      updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData.data) return prev;
+        const newFeedItem = subscriptionData.data.newMessage;
+        return Object.assign({}, prev, {
+          messages: [newFeedItem, ...prev.messages],
+        });
+      },
+    });
+
+  const subscribeToDeletedMessages = () =>
+    subscribeToMore({
+      document: SUBSCRIBE_TO_DELETED_MESSAGES,
+      updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData.data) return prev;
+        const deletedItem = subscriptionData.data.deleteMessage;
+        const messages = prev.messages.filter(
+          (item) => item.id !== deletedItem.id
+        );
+        return { messages };
+      },
+    });
 
   return (
     <>
@@ -86,7 +116,14 @@ function ChatWindow() {
                 {error}
               </Text>
             ) : (
-              <Chat user={user?.userName} dummy={dummyRef} />
+              <Chat
+                user={user?.userName}
+                dummy={dummyRef}
+                loading={loading}
+                data={data}
+                subscribeToNewMessages={subscribeToNewMessages}
+                subscribeToDeletedMessages={subscribeToDeletedMessages}
+              />
             )}
             <span ref={dummyRef}></span>
           </Container>
