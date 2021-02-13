@@ -20,6 +20,7 @@ import {
   SUBSCRIBE_TO_DELETED_MESSAGES,
   SUBSCRIBE_TO_MESSAGES,
 } from "../schema/subscriptions";
+import Rte from "../components/RichTextEditor";
 
 function ChatWindow() {
   const { user } = useContext(UserContext);
@@ -142,6 +143,7 @@ function ChatWindow() {
               value={content}
               onChange={(e) => setContent(e.target.value)}
             />
+            {/* <Rte value={content} setValue={setContent} /> */}
             <IconButton
               type="submit"
               colorScheme="blue"
