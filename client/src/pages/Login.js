@@ -10,10 +10,11 @@ function Login() {
   const { handleLogin, email, password, setEmail, setPassword } = useContext(
     UserContext
   );
-  const { data, loading } = useQuery(GET_USER);
+  
+  const { data, loading } = useQuery(GET_USER, { fetchPolicy: 'network-only' });
 
   if (loading) return <Loading />;
-  if (data?.me?.id) return <Redirect to="/" />;
+  if (data.me?.id) return <Redirect to="/" />;
 
   return (
     <Box

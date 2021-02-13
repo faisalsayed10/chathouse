@@ -1,5 +1,5 @@
 import { useMutation } from "@apollo/client";
-import React, { useState, createContext } from "react";
+import React, { useState, createContext, useEffect } from "react";
 import { LOGIN, REGISTER } from "../schema/mutations";
 import { useHistory } from "react-router-dom";
 import { useToast } from "@chakra-ui/react";
@@ -15,11 +15,14 @@ const UserProvider = ({ children }) => {
   const [register] = useMutation(REGISTER);
   const toast = useToast();
 
+  useEffect(() => {
+    if (user) history.push("/");
+  }, [user, history]);
+
   const handleLogin = async (e) => {
     try {
       e.preventDefault();
       const { data } = await login({ variables: { email, password } });
-      console.log(data)
       setUser(data.login);
       toast({
         title: `Login Success!`,
@@ -31,7 +34,6 @@ const UserProvider = ({ children }) => {
       setEmail("");
       setPassword("");
       console.log("redirecting...");
-      history.push("/");
     } catch (err) {
       console.error(err);
       toast({

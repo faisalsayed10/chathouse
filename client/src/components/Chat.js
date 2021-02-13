@@ -17,9 +17,7 @@ import Loading from "./Loading";
 
 function Chat({ user, dummy }) {
   const { loading, data } = useQuery(GET_MESSAGES);
-  const [deleteMessage] = useMutation(DELETE_MESSAGE, {
-    
-  });
+  const [deleteMessage] = useMutation(DELETE_MESSAGE);
 
   useEffect(() => {
     if (loading) {

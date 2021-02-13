@@ -12,6 +12,7 @@
     "copy-text-to-clipboard": "^3.0.0",
     "framer-motion": "^3.2.2-rc.1",
     "graphql": "^15.4.0",
+    "html-react-parser": "^1.2.4",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-router-dom": "^5.2.0",

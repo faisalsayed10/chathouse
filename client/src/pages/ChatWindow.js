@@ -15,18 +15,26 @@ import { UserContext } from "../context/context";
 import { useMutation } from "@apollo/client";
 import { useHistory } from "react-router-dom";
 import "../styles.css";
-import { GET_MESSAGES } from "../schema/queries";
 
 function ChatWindow() {
   const { user } = useContext(UserContext);
   const history = useHistory();
   const [content, setContent] = useState("");
   const [error, setError] = useState("");
-  const [sendMessage] = useMutation(SEND_MESSAGE);
-
-  const [logout] = useMutation(LOGOUT);
+  const [sendMessage] = useMutation(SEND_MESSAGE)
+  const [logout, { client }] = useMutation(LOGOUT);
   const dummyRef = useRef();
 
+  const handleLogout = async (e) => {
+    try {
+      await logout();
+      await client.clearStore();
+      history.push("/login");
+    } catch (err) {
+      console.error(err);
+    }
+  };
+  
   const handleSubmit = async (e) => {
     try {
       e.preventDefault();
@@ -35,21 +43,12 @@ function ChatWindow() {
       });
       setContent("");
       dummyRef.current.scrollIntoView({ behavior: "smooth" });
-      
     } catch (err) {
       setError("Server not reachable at the moment");
       setContent("");
     }
   };
 
-  const handleLogout = async (e) => {
-    try {
-      await logout();
-      history.push("/login");
-    } catch (err) {
-      console.error(err);
-    }
-  };
 
   return (
     <>
@@ -96,6 +95,7 @@ function ChatWindow() {
             as="form"
             display="flex"
             justifyContent="space-between"
+            alignItems="center"
             onSubmit={handleSubmit}
           >
             <Input

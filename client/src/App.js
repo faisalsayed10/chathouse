@@ -1,11 +1,12 @@
 import { ChakraProvider } from "@chakra-ui/react";
 import ChatWindow from "./pages/ChatWindow";
-import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import PrivateRoute from "./pages/PrivateRoute";
 import { UserProvider } from "./context/context";
+import { ApolloProvider } from "@apollo/client";
+import client from "./Apollo";
 
 function App() {
   return (
@@ -26,12 +27,5 @@ function App() {
     </ApolloProvider>
   );
 }
-
-const client = new ApolloClient({
-  uri: process.env.REACT_APP_GRAPHQL_URI,
-  // uri: "http://localhost:4000/graphql",
-  cache: new InMemoryCache(),
-  credentials: "include",
-});
 
 export default App;
