@@ -9,7 +9,7 @@ import { Box, IconButton, useToast } from "@chakra-ui/react";
 import { ArrowForwardIcon } from "@chakra-ui/icons";
 import { SEND_MESSAGE } from "../schema/mutations";
 import { useMutation, useQuery } from "@apollo/client";
-import { GET_ALL_USERS_NAME } from "../schema/queries";
+import { GET_ALL_USERS_NAME, GET_MESSAGES } from "../schema/queries";
 
 export default function ControlledEditor({ dummyRef, userName }) {
   const [editorState, setEditorState] = useState(EditorState.createEmpty()),
@@ -17,7 +17,21 @@ export default function ControlledEditor({ dummyRef, userName }) {
       setEditorState(editorState);
     };
   const toast = useToast();
-  const [sendMessage] = useMutation(SEND_MESSAGE);
+  const [sendMessage] = useMutation(SEND_MESSAGE, {
+    update(cache, { data: { sendMessage }}) {
+      cache.modify({
+        fields: {
+          messages(existingMessages = []) {
+            const newMessageRef = cache.writeQuery({
+              data: sendMessage,
+              query: GET_MESSAGES
+            });
+            return [...existingMessages, newMessageRef]
+          }
+        }
+      })
+    }
+  });
   const { data } = useQuery(GET_ALL_USERS_NAME);
   // eslint-disable-next-line
   const [suggestions, setSuggestions] = useState([]);

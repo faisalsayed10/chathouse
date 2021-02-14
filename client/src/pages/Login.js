@@ -22,10 +22,17 @@ function Login() {
       minH="100vh"
       alignItems="center"
       justifyContent="center"
+      flexDir="column"
     >
+      <Text as="h1" fontSize="3xl" align="center">
+        👋 Chathouse
+      </Text>
+      <Text as="p" align="center" mb="4">
+        Public Drop-In Chat App
+      </Text>
       <Box w="sm" px="4" py="8" borderWidth="2px" borderRadius="lg">
         <Text as="h2" fontSize="2xl" align="center">
-          👋 Log in
+          Log in
         </Text>
         <Box as="form" mt="16" onSubmit={handleLogin}>
           <Input
