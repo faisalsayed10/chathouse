@@ -64,7 +64,7 @@ const UserProvider = ({ children }) => {
       setUserName("");
       setPassword("");
       console.log("redirecting...");
-      history.push("/");
+      // history.push("/");
     } catch (err) {
       console.error(err);
       toast({

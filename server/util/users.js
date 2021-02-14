@@ -85,4 +85,14 @@ const getUser = async (id) => {
   return user;
 };
 
-module.exports = { createUser, loginUser, getUser };
+const getAllUsers = async () => {
+  const snapshot = await firestore.collection("users").get();
+  const users = [];
+  snapshot.forEach((doc) => {
+    users.push({ ...doc.data(), id: doc.id });
+  });
+
+  return users;
+}
+
+module.exports = { createUser, loginUser, getUser, getAllUsers };

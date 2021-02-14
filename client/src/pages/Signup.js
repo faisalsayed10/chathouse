@@ -29,7 +29,7 @@ function Signup() {
       justifyContent="center"
     >
       <Box w="sm" px="4" py="8" borderWidth="2px" borderRadius="lg">
-        <Text fontSize="2xl" align="center">
+        <Text as="h2" fontSize="2xl" align="center">
           👋 Sign up
         </Text>
         <Box as="form" mt="16" onSubmit={handleSignup}>

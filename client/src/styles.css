@@ -10,12 +10,47 @@
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
 }
 
-p,
-ul,
-li,
 code {
   display: inline;
-  padding: 0;
+  font-family: monospace;
+  overflow-wrap: break-word;
+  background: rgb(88, 88, 88);
+  border-radius: 3px;
+  padding: 1px 3px;
+}
+
+/* React Draft WYSIWYG Styles */
+/* You need to add !important at some places inorder to override the default styles */
+
+.wrapper {
+  border: 2px solid #E2E8F0;
+  border-radius: 10px;
+  width: 100%;
+  margin-right: 5px;
+}
+
+.editor {
+  padding: 10px;
+  max-height: 135px;
+  overflow-y: auto;
+}
+
+.public-DraftStyleDefault-block {
+  margin: 0 !important;
+}
+
+.popup {
+  bottom: 35px !important;
+  top: auto !important;
+  height: 230px !important;
+}
+
+.rdw-colorpicker-modal {
+  width: 230px !important;
+}
+
+.rdw-colorpicker-modal-options {
+  overflow: hidden !important;
 }
 
 a {
@@ -23,10 +58,23 @@ a {
   text-decoration: underline !important;
 }
 
-code {
-  font-family: monospace;
-  overflow-wrap: break-word;
-  background: rgb(88, 88, 88);
-  border-radius: 3px;
-  padding: 1px 3px;
+.rdw-suggestion-dropdown {
+  position: revert !important;
+  border-radius: 5px;
+  background: #222529 !important;
+  max-width: 120px;
+  color: whitesmoke;
+  font-weight: bold;
+}
+
+.wysiwyg-hashtag {
+  background-color: #d7f1fa;
+  padding: 2px;
+  border-radius: 2px;
+}
+
+.wysiwyg-mention {
+  background-color: #d7f1fa;
+  padding: 2px;
+  border-radius: 2px;
 }

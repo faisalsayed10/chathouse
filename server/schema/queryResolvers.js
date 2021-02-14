@@ -1,5 +1,5 @@
 const { getAllMessages } = require("../util/messages");
-const { getUser } = require("../util/users");
+const { getUser, getAllUsers } = require("../util/users");
 
 const Query = {
   messages: () => getAllMessages(),
@@ -10,6 +10,7 @@ const Query = {
 
     return getUser(req.id);
   },
+  users: () => getAllUsers()
 };
 
 module.exports = { Query }

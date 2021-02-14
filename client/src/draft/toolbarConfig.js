@@ -1,15 +1,19 @@
 const toolbarConfig = {
-  options: [
-    "inline",
-    "colorPicker",
-    "link",
-    "emoji",
-    "image",
-  ],
+  options: ["inline", "colorPicker", "link", "emoji", "image"],
   inline: {
     options: ["bold", "italic", "underline", "strikethrough", "monospace"],
   },
+  link: {
+    popupClassName: "popup",
+  },
+  image: {
+    popupClassName: "popup",
+  },
+  colorPicker: {
+    popupClassName: "popup",
+  },
   emoji: {
+    popupClassName: "popup",
     emojis: [
       "😀",
       "😁",

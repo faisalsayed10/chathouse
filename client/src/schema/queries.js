@@ -19,4 +19,12 @@ export const GET_USER = gql`
       email
     }
   }
-`
+`;
+
+export const GET_ALL_USERS_NAME = gql`
+  {
+    users {
+      userName
+    }
+  }
+`;

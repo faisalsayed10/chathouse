@@ -3,14 +3,11 @@ import {
   Button,
   Container,
   Flex,
-  IconButton,
-  Input,
   Text,
 } from "@chakra-ui/react";
-import { ArrowForwardIcon } from "@chakra-ui/icons";
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useRef } from "react";
 import Chat from "../components/Chat";
-import { LOGOUT, SEND_MESSAGE } from "../schema/mutations";
+import { LOGOUT } from "../schema/mutations";
 import { UserContext } from "../context/context";
 import { useMutation, useQuery } from "@apollo/client";
 import { useHistory } from "react-router-dom";
@@ -21,6 +18,8 @@ import {
   SUBSCRIBE_TO_MESSAGES,
 } from "../schema/subscriptions";
 import Draft from "../draft/Draft";
+import CommunityGuidelinesModal from "../components/CommunityGuidelinesModal";
+import { ReactComponent as Github } from "../assets/github.svg"
 
 function ChatWindow() {
   const { user } = useContext(UserContext);
@@ -66,27 +65,26 @@ function ChatWindow() {
 
   return (
     <>
-      <Button
-        pos="absolute"
-        right="10px"
-        colorScheme="cyan"
-        variant="ghost"
-        top="10px"
-        display="block"
-        onClick={handleLogout}
-      >
-        Log Out
-      </Button>
-      <Flex justify="center" align="center">
+      <Flex m="2" align="center" justify="space-between">
+        <CommunityGuidelinesModal />
+        {/* <ProfileModal /> */}
+        <Button
+          fontSize={["sm", "md"]}
+          padding={["12px", "17px"]}
+          colorScheme="green"
+          onClick={handleLogout}
+        >
+          Log Out
+        </Button>
+      </Flex>
+      <Flex justify="center" align="center" mt="2">
         <Container
           borderWidth="2px"
           borderRadius="lg"
           bgColor="#f8f8ff"
-          width={["300px", "450px", "600px"]}
-          mt="14"
           mx="0"
           p="0"
-          height="80vh"
+          height="70vh"
           zIndex="2"
         >
           <Container
@@ -108,6 +106,27 @@ function ChatWindow() {
           <Draft dummyRef={dummyRef} userName={user?.userName} />
         </Container>
       </Flex>
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        pos="fixed"
+        bottom="0"
+        height="30px"
+        w="100%"
+        bgColor="#dfdfdf"
+      >
+        <Text as="h4" align="center" mr="1">
+          © Faisal Sayed
+        </Text>
+        <a
+          href="https://github.com/faisalsayed10/chathouse"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <Github />
+        </a>
+      </Box>
     </>
   );
 }
