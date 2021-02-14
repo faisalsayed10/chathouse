@@ -21,9 +21,10 @@ function CommunityGuidelinesModal() {
         fontSize={["sm", "md"]}
         padding={["12px", "17px"]}
         onClick={onOpen}
-        colorScheme="green"
+        colorScheme="blue"
+        variant="ghost"
       >
-        Comm. Guidelines
+        Community Guidelines
       </Button>
       <Modal onClose={onClose} isOpen={isOpen} isCentered>
         <ModalOverlay />

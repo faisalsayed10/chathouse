@@ -1,11 +1,5 @@
-import {
-  Box,
-  Button,
-  Container,
-  Flex,
-  Text,
-} from "@chakra-ui/react";
-import React, { useContext, useRef } from "react";
+import { Box, Button, Container, Flex, Text } from "@chakra-ui/react";
+import React, { useContext, useEffect, useRef } from "react";
 import Chat from "../components/Chat";
 import { LOGOUT } from "../schema/mutations";
 import { UserContext } from "../context/context";
@@ -19,7 +13,7 @@ import {
 } from "../schema/subscriptions";
 import Draft from "../draft/Draft";
 import CommunityGuidelinesModal from "../components/CommunityGuidelinesModal";
-import { ReactComponent as Github } from "../assets/github.svg"
+import { ReactComponent as Github } from "../assets/github.svg";
 
 function ChatWindow() {
   const { user } = useContext(UserContext);
@@ -27,6 +21,8 @@ function ChatWindow() {
   const [logout, { client }] = useMutation(LOGOUT);
   const dummyRef = useRef();
   const { loading, data, subscribeToMore } = useQuery(GET_MESSAGES);
+
+  useEffect(() => dummyRef.current.scrollIntoView({ behavior: "smooth" }), []);
 
   const handleLogout = async (e) => {
     try {
@@ -71,7 +67,8 @@ function ChatWindow() {
         <Button
           fontSize={["sm", "md"]}
           padding={["12px", "17px"]}
-          colorScheme="green"
+          colorScheme="blue"
+          variant="ghost"
           onClick={handleLogout}
         >
           Log Out

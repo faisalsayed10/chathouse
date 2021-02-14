@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { EditorState, convertToRaw } from "draft-js";
+import { EditorState, convertToRaw, getDefaultKeyBinding } from "draft-js";
 import { Editor } from "react-draft-wysiwyg";
 import "../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import toolbarConfig from "./toolbarConfig";
 import hashtagConfig from "./hashtagConfig";
-// import mentionConfig from "./mentionConfig";
 import draftToHtml from "draftjs-to-html";
 import { Box, IconButton, useToast } from "@chakra-ui/react";
 import { ArrowForwardIcon } from "@chakra-ui/icons";
@@ -22,6 +21,16 @@ export default function ControlledEditor({ dummyRef, userName }) {
   const { data } = useQuery(GET_ALL_USERS_NAME);
   // eslint-disable-next-line
   const [suggestions, setSuggestions] = useState([]);
+  const newState = EditorState.createEmpty();
+
+  const keyBindingFn = (event) => {
+    if (event.keyCode === 13 && event.shiftKey) {
+      handleSubmit().then(() =>
+        setEditorState(EditorState.moveFocusToEnd(newState))
+      );
+    }
+    return getDefaultKeyBinding(event);
+  };
 
   useEffect(() => {
     if (data && data.users) {
@@ -36,14 +45,13 @@ export default function ControlledEditor({ dummyRef, userName }) {
     // eslint-disable-next-line
   }, [data]);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async () => {
     try {
-      e.preventDefault();
       const rawContentState = convertToRaw(editorState.getCurrentContent());
-      if (rawContentState.blocks[0].text === "") {
+      if (rawContentState.blocks[0].text.trim() === "") {
         toast({
           title: `Cannot send the message`,
-          description: `Message can't be empty.`,
+          description: `Message can't have a newline at the beginning or be empty.`,
           status: "error",
           duration: 2000,
           isClosable: true,
@@ -54,7 +62,6 @@ export default function ControlledEditor({ dummyRef, userName }) {
       await sendMessage({
         variables: { author: userName, message: markup.toString() },
       });
-      setEditorState(EditorState.createEmpty());
       dummyRef.current.scrollIntoView({ behavior: "smooth" });
     } catch (err) {
       toast({
@@ -84,11 +91,15 @@ export default function ControlledEditor({ dummyRef, userName }) {
         }}
         hashtag={hashtagConfig}
         editorState={editorState}
-        placeholder="Type your message..."
+        placeholder={`Type your message | Enter - Newline | Shift+Enter - Send`}
         wrapperClassName="wrapper"
         editorClassName="editor"
         toolbarClassName="toolbar"
         onEditorStateChange={onEditorStateChange}
+        handleReturn={() => {
+          return;
+        }}
+        keyBindingFn={keyBindingFn}
       />
       <IconButton
         onClick={handleSubmit}
