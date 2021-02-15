@@ -2,22 +2,49 @@ const { postMessage, deleteMessage } = require("../util/messages");
 const { createUser, loginUser } = require("../util/users");
 require("dotenv").config();
 
+const MESSAGE_POSTED = "MESSAGE_POSTED";
+const MESSAGE_DELETED = "MESSAGE_DELETED";
+
+const Subscription = {
+  newMessage: {
+    subscribe: (_, __, { pubsub }) => pubsub.asyncIterator(MESSAGE_POSTED),
+  },
+  deleteMessage: {
+    subscribe: (_, __, { pubsub }) => pubsub.asyncIterator(MESSAGE_DELETED),
+  }
+};
+
 const Mutation = {
-  postMessage: (_, { message, author }, { req, res }) => {
+  postMessage: (_, { message, author }, { req, res, pubsub }) => {
     const accessToken = req.cookies["access-token"];
     const refreshToken = req.cookies["refresh-token"];
     if (!refreshToken && !accessToken) {
       throw new Error("You are not logged in");
     }
 
-    return postMessage({
+    let createdAt = new Date().toISOString();
+
+    const id = postMessage({
       message,
       author,
-      createdAt: new Date().toISOString(),
+      createdAt
     });
+
+    const messageObject = { id, message, author, createdAt };
+    pubsub.publish(MESSAGE_POSTED, {
+      newMessage: messageObject
+    });
+
+    return id;
   },
-  deleteMessage: async (_, { id }) => {
-    return deleteMessage(id);
+  deleteMessage: async (_, { id }, { pubsub }) => {
+    const messageInfo = await deleteMessage(id);
+
+    pubsub.publish(MESSAGE_DELETED, {
+      deleteMessage: messageInfo,
+    });
+
+    return "Message Successfully Deleted!";
   },
   register: async (_, { userName, email, password }, { req, res }) => {
     const response = await createUser({ userName, email, password });
@@ -71,4 +98,4 @@ const Mutation = {
   },
 };
 
-module.exports = { Mutation };
+module.exports = { Mutation, Subscription };

@@ -3,6 +3,7 @@ const cookieParser = require("cookie-parser");
 const { verify } = require("jsonwebtoken");
 const { createTokens } = require("./util/auth.js");
 const { getUser } = require("./util/users.js");
+const { createServer } = require("http");
 const app = require("express")();
 app.use(cookieParser());
 const server = require("./schema/schema.js");
@@ -61,12 +62,20 @@ const startServer = async () => {
     app,
     cors: {
       credentials: true,
-      origin: process.env.ORIGIN,
+      origin: process.env.ORIGIN || 'http://localhost:3000',
     },
   });
 
-  app.listen({ port: process.env.PORT || 4000 }, () => {
-    console.log(`🚀 Server ready!`);
+  const httpServer = createServer(app);
+  server.installSubscriptionHandlers(httpServer)
+
+  httpServer.listen({ port: process.env.PORT || 4000 }, () => {
+    console.log(
+      `🚀 Server ready at http://localhost:4000${server.graphqlPath}`
+    );
+    console.log(
+      `🚀 Subscriptions ready at ws://localhost:4000${server.subscriptionsPath}`
+    );
   });
 };
 

@@ -13,12 +13,12 @@ const createUser = async (data) => {
   let errors;
 
   if (data.password.length < 8) {
-    errors = { message: "password is too short" };
+    errors = { message: "Password is too short." };
     return errors;
   }
 
   if (validateEmail(data.email) === false) {
-    errors = { message: "email is invalid" };
+    errors = { message: "Email is invalid." };
     return errors;
   }
 
@@ -60,13 +60,13 @@ const loginUser = async (email, password) => {
   });
 
   if (user === undefined) {
-    errors = { message: "No such user exists" };
+    errors = { message: "No such user exists." };
     return errors;
   }
 
   const passwordIsValid = await bcrypt.compare(password, user.password);
   if (!passwordIsValid) {
-    errors = { message: "Password is incorrect" };
+    errors = { message: "Password is incorrect." };
     return errors;
   }
 

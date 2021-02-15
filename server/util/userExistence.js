@@ -9,7 +9,7 @@ async function searchIfEmailExists(userRef, email) {
     return;
   }
 
-  return { message: "Email already exists" };
+  return { message: "Email already exists." };
 }
 
 async function searchIfUserNameExists(userRef, userName) {
@@ -23,7 +23,7 @@ async function searchIfUserNameExists(userRef, userName) {
     return;
   }
 
-  return { message: "Username already exists" };
+  return { message: "Username already exists." };
 }
 
 module.exports = { searchIfEmailExists, searchIfUserNameExists };
