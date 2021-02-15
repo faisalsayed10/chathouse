@@ -17,7 +17,7 @@ export default function ControlledEditor({ dummyRef, userName }) {
       setEditorState(editorState);
     };
   const toast = useToast();
-  const [sendMessage] = useMutation(SEND_MESSAGE, {
+  const [sendMessage, { loading }] = useMutation(SEND_MESSAGE, {
     update(cache, { data: { sendMessage }}) {
       cache.modify({
         fields: {
@@ -39,9 +39,7 @@ export default function ControlledEditor({ dummyRef, userName }) {
 
   const keyBindingFn = (event) => {
     if (event.keyCode === 13 && event.shiftKey) {
-      handleSubmit().then(() =>
-        setEditorState(EditorState.moveFocusToEnd(newState))
-      );
+      handleSubmit()
     }
     return getDefaultKeyBinding(event);
   };
@@ -76,6 +74,7 @@ export default function ControlledEditor({ dummyRef, userName }) {
       await sendMessage({
         variables: { author: userName, message: markup.toString() },
       });
+      setEditorState(EditorState.moveFocusToEnd(newState));
       dummyRef.current.scrollIntoView({ behavior: "smooth" });
     } catch (err) {
       toast({
@@ -114,6 +113,7 @@ export default function ControlledEditor({ dummyRef, userName }) {
           return;
         }}
         keyBindingFn={keyBindingFn}
+        readOnly={loading}
       />
       <IconButton
         onClick={handleSubmit}
