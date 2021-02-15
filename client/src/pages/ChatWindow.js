@@ -81,7 +81,8 @@ function ChatWindow() {
           bgColor="#f8f8ff"
           mx="0"
           p="0"
-          height="70vh"
+          width={["85vw", "80vw", "600px"]}
+          height={["65vh", "70vh", "70vh"]}
           zIndex="2"
         >
           <Container
@@ -104,9 +105,10 @@ function ChatWindow() {
         </Container>
       </Flex>
       <Box
-        display="flex"
+        display={["none", "flex", "flex"]}
         justifyContent="center"
         alignItems="center"
+        zIndex="1000"
         pos="fixed"
         bottom="0"
         height="30px"

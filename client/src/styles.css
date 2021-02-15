@@ -35,6 +35,12 @@ code {
   overflow-y: auto;
 }
 
+@media (max-width: 510px) {
+  .editor {
+    min-height: 50px;
+  }
+}
+
 .public-DraftStyleDefault-block {
   margin: 0 !important;
 }
