@@ -36,13 +36,11 @@ const typeDefs = gql`
   }
 `;
 
-const pubsub = new PubSub()
+const pubsub = new PubSub();
 const resolvers = { Subscription, Query, Mutation };
 
 module.exports = new ApolloServer({
   typeDefs,
   resolvers,
   context: ({ req, res }) => ({ req, res, pubsub }),
-  playground: true,
-  introspection: true,
 });
