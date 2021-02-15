@@ -4,18 +4,15 @@ import { split, HttpLink } from "@apollo/client";
 import { getMainDefinition } from "@apollo/client/utilities";
 
 const wsLink = new WebSocketLink({
-  uri: `ws://localhost:4000/graphql`,
+  uri: process.env.REACT_APP_WS_URI || `ws://localhost:4000/graphql`,
   options: {
     reconnect: true,
-    // connectionParams: {
-    //   authToken: user.id
-    // }
   },
 });
 
 const httpLink = new HttpLink({
-  uri: "http://localhost:4000/graphql",
-  credentials: "include"
+  uri: process.env.REACT_APP_GRAPHQL_URI || "http://localhost:4000/graphql",
+  credentials: "include",
 });
 
 const link = split(
