@@ -1,3 +1,4 @@
+const { verify } = require("jsonwebtoken");
 const { postMessage, deleteMessage } = require("../util/messages");
 const { createUser, loginUser } = require("../util/users");
 require("dotenv").config();
@@ -11,7 +12,7 @@ const Subscription = {
   },
   deleteMessage: {
     subscribe: (_, __, { pubsub }) => pubsub.asyncIterator(MESSAGE_DELETED),
-  }
+  },
 };
 
 const Mutation = {
@@ -23,16 +24,25 @@ const Mutation = {
     }
 
     let createdAt = new Date().toISOString();
+    const data = verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
 
     const id = postMessage({
       message,
       author,
-      createdAt
+      createdAt,
+      isVerified: data.verified || false,
     });
 
-    const messageObject = { id, message, author, createdAt };
+    const messageObject = {
+      id,
+      message,
+      author,
+      createdAt,
+      isVerified: data.verified || false,
+    };
+
     pubsub.publish(MESSAGE_POSTED, {
-      newMessage: messageObject
+      newMessage: messageObject,
     });
 
     return id;
@@ -88,7 +98,7 @@ const Mutation = {
   logout: async (_, __, { req, res }) => {
     res.clearCookie("refresh-token", {
       sameSite: "None",
-      secure: true
+      secure: true,
     });
     res.clearCookie("access-token", {
       sameSite: "None",

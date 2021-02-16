@@ -10,7 +10,7 @@ const Query = {
 
     return getUser(req.id);
   },
-  users: () => getAllUsers()
+  users: () => getAllUsers(),
 };
 
-module.exports = { Query }
+module.exports = { Query };

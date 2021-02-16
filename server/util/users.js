@@ -41,16 +41,18 @@ const createUser = async (data) => {
   }
 
   const hashedPassword = await bcrypt.hash(data.password, 10);
+
   const userDetails = {
     ...data,
     password: hashedPassword,
     userName: data.userName,
     id: user.id,
+    isVerified: false,
   };
 
   const { accessToken, refreshToken } = createTokens(userDetails);
 
-  user.set({ ...data, password: hashedPassword });
+  user.set({ ...data, password: hashedPassword, isVerified: false });
   return {
     userDetails,
     userName: data.userName,

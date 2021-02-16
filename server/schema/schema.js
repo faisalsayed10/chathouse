@@ -8,12 +8,14 @@ const typeDefs = gql`
     author: String
     id: ID
     createdAt: String
+    isVerified: Boolean
   }
 
   type User {
     id: ID!
     userName: String!
     email: String!
+    isVerified: Boolean!
   }
 
   type Query {

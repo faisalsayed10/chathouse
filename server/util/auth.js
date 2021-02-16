@@ -3,7 +3,12 @@ require("dotenv").config();
 
 const createTokens = (user) => {
   const refreshToken = sign(
-    { id: user.id, email: user.email, userName: user.userName },
+    {
+      id: user.id,
+      email: user.email,
+      userName: user.userName,
+      verified: user.isVerified || false,
+    },
     process.env.REFRESH_TOKEN_SECRET,
     {
       expiresIn: "7d",
@@ -11,7 +16,12 @@ const createTokens = (user) => {
   );
 
   const accessToken = sign(
-    { id: user.id, email: user.email, userName: user.userName },
+    {
+      id: user.id,
+      email: user.email,
+      userName: user.userName,
+      verified: user.isVerified || false,
+    },
     process.env.ACCESS_TOKEN_SECRET,
     {
       expiresIn: "15min",
@@ -21,4 +31,4 @@ const createTokens = (user) => {
   return { refreshToken, accessToken };
 };
 
-module.exports = { createTokens }
+module.exports = { createTokens };

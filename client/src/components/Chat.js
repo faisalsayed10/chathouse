@@ -44,7 +44,7 @@ function Chat({
   return (
     <>
       {data ? (
-        data?.messages.map(({ message, author, id }) => (
+        data?.messages.map(({ message, author, id, isVerified }) => (
           <Box
             key={id}
             display="flex"
@@ -75,7 +75,17 @@ function Chat({
               fontSize="md"
             >
               <span style={{ fontWeight: "bold" }}>
-                {user === author ? "You" : author}:
+                {user === author ? "You" : author}{" "}
+                {isVerified ? (
+                  <img
+                    style={{ display: "inline" }}
+                    width="20"
+                    height="20"
+                    alt="verified_user"
+                    src="https://upload.wikimedia.org/wikipedia/commons/e/e4/Twitter_Verified_Badge.svg"
+                  />
+                ) : null}
+                :
               </span>{" "}
               {parse(message)}
             </Box>

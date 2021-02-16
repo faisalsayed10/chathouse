@@ -7,6 +7,7 @@ export const GET_MESSAGES = gql`
       message
       author
       createdAt
+      isVerified
     }
   }
 `;
