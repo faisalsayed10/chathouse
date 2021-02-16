@@ -23,10 +23,7 @@ const createUser = async (data) => {
   }
 
   const ifEmailExists = await searchIfEmailExists(userRef, data.email);
-  const ifUserNameExists = await searchIfUserNameExists(
-    userRef,
-    data.userName.toLowerCase()
-  );
+  const ifUserNameExists = await searchIfUserNameExists(userRef, data.userName);
 
   if (ifEmailExists && ifEmailExists.message) {
     errors = { message: ifEmailExists.message };
@@ -38,13 +35,28 @@ const createUser = async (data) => {
     return errors;
   }
 
+  if (data.userName.match(/(fayd)|(faisal\s?sayed)/gi)) {
+    errors = { message: "BRUH" };
+    return errors;
+  }
+
   const hashedPassword = await bcrypt.hash(data.password, 10);
-  const userDetails = { ...data, password: hashedPassword, userName: data.userName.toLowerCase(), id: user.id };
+  const userDetails = {
+    ...data,
+    password: hashedPassword,
+    userName: data.userName,
+    id: user.id,
+  };
 
   const { accessToken, refreshToken } = createTokens(userDetails);
 
   user.set({ ...data, password: hashedPassword });
-  return { userDetails, userName: data.userName.toLowerCase(), accessToken, refreshToken };
+  return {
+    userDetails,
+    userName: data.userName,
+    accessToken,
+    refreshToken,
+  };
 };
 
 const loginUser = async (email, password) => {
@@ -93,6 +105,6 @@ const getAllUsers = async () => {
   });
 
   return users;
-}
+};
 
 module.exports = { createUser, loginUser, getUser, getAllUsers };
