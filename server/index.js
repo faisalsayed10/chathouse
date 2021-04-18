@@ -4,8 +4,10 @@ const { verify } = require("jsonwebtoken");
 const { createTokens } = require("./util/auth.js");
 const { getUser } = require("./util/users.js");
 const { createServer } = require("http");
+const cors = require("cors");
 const app = require("express")();
 app.use(cookieParser());
+app.use(cors());
 const server = require("./schema/schema.js");
 
 const startServer = async () => {
@@ -58,13 +60,7 @@ const startServer = async () => {
     next();
   });
 
-  server.applyMiddleware({
-    app,
-    cors: {
-      credentials: true,
-      origin: process.env.ORIGIN || 'http://localhost:3000',
-    },
-  });
+  server.applyMiddleware({ app });
 
   const httpServer = createServer(app);
   server.installSubscriptionHandlers(httpServer)
