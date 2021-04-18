@@ -48,7 +48,7 @@ const startServer = async () => {
     res.cookie("refresh-token", tokens.refreshToken, {
       expires: new Date(Number(new Date()) + 604800000),
       sameSite: "None",
-      secure: true
+      secure: true,
     });
     res.cookie("access-token", tokens.accessToken, {
       expires: new Date(Number(new Date()) + 900000),
@@ -60,10 +60,16 @@ const startServer = async () => {
     next();
   });
 
-  server.applyMiddleware({ app });
+  server.applyMiddleware({
+    app,
+    cors: {
+      credentials: true,
+      origin: process.env.ORIGIN || "http://localhost:3000",
+    },
+  });
 
   const httpServer = createServer(app);
-  server.installSubscriptionHandlers(httpServer)
+  server.installSubscriptionHandlers(httpServer);
 
   httpServer.listen({ port: process.env.PORT || 4000 }, () => {
     console.log(
