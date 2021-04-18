@@ -4,10 +4,10 @@ const { verify } = require("jsonwebtoken");
 const { createTokens } = require("./util/auth.js");
 const { getUser } = require("./util/users.js");
 const { createServer } = require("http");
-const cors = require("cors");
+// const cors = require("cors");
 const app = require("express")();
 app.use(cookieParser());
-app.use(cors());
+// app.use(cors());
 const server = require("./schema/schema.js");
 
 const startServer = async () => {
